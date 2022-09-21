@@ -7,7 +7,7 @@ from django.db import models
 # Эту тему мы рассмотрим далее.
 
 class Users(models.Model):
-    username = models.CharField(max_length=64)
+    username = models.CharField(max_length=64, unique=True)
     firstname = models.CharField(max_length=64)
     lastname = models.CharField(max_length=64)
     email = models.EmailField(max_length=64, unique=True)

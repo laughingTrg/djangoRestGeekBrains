@@ -18,7 +18,11 @@ from django.urls import path
 from django.conf.urls import include
 from rest_framework.routers import DefaultRouter
 
+from todo_users.views import UsersModelViewSet
+
 router = DefaultRouter()
+router.register('users', UsersModelViewSet)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
