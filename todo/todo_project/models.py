@@ -19,7 +19,7 @@ class TODO(models.Model):
     create_date = models.DateField(auto_now_add=True)
     update_date = models.DateField()
     users = models.ForeignKey(Users, models.PROTECT)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
 
 
