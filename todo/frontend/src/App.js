@@ -3,12 +3,17 @@ import './App.css';
 import React from 'react';
 import UserList from './components/User.js';
 import axios from 'axios';
+import ProjectList from "./components/Project.js";
+import TodoList from "./components/Todo";
+import {BrowserRouter, Link, Navigate, Route, Routes} from "react-router-dom";
 
 class App extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             'users': [],
+            'projects': [],
+            'todos': [],
         }
     }
 
@@ -18,17 +23,60 @@ class App extends React.Component {
                 const users = responce.data
                 this.setState(
                     {
-                        'users': users
+                        'users': users,
                     }
                 )
+            }).catch(error => console.log(error))
+
+        axios.get('http://127.0.0.1:8000/api/projects')
+            .then(responce => {
+                const projects = responce.data
+
+                this.setState(
+                    {
+                        'projects': projects,
+                    }
+                )
+
+            }).catch(error => console.log(error))
+
+        axios.get('http://127.0.0.1:8000/api/todos')
+            .then(responce => {
+                const todos = responce.data
+
+                this.setState(
+                    {
+                        'todos': todos,
+                    }
+                )
+
             }).catch(error => console.log(error))
     }
 
     render() {
         return (
 
-            <div>
-                <UserList users={this.state.users} />
+            <div className="App">
+                <BrowserRouter>
+                    <nav>
+                        <li>
+                            <Link to='/'>Users</Link>
+                        </li>
+                        <li>
+                            <Link to='/projects'>Projects</Link>
+                        </li>
+                        <li>
+                            <Link to='/todos'>Todos</Link>
+                        </li>
+                    </nav>
+
+                    <Routes>
+                        <Route exact path='/' element={<UserList users={this.state.users}/>}/>
+                        <Route exact path='/projects' element={<ProjectList projects={this.state.projects}/>}/>
+                        <Route exact path='/todos' element={<TodoList todos={this.state.todos}/>}/>
+
+                    </Routes>
+                </BrowserRouter>
             </div>
 
         )

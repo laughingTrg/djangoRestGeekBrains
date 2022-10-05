@@ -17,3 +17,4 @@ class UsersCustomViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixin
     serializer_class = UsersModelSerializer
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
 
+
