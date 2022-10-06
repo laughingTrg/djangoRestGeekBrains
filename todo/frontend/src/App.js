@@ -7,6 +7,7 @@ import ProjectList from "./components/Project.js";
 import TodoList from "./components/Todo";
 import {BrowserRouter, Link, Navigate, Redirect, Route, Routes} from "react-router-dom";
 import NotFound404 from "./components/NotFound404";
+import ProjectDetail from "./components/ProjectDetail";
 
 class App extends React.Component {
     constructor(props) {
@@ -61,7 +62,7 @@ class App extends React.Component {
                 <BrowserRouter>
                     <nav>
                         <li>
-                            <Link to='/'>Users</Link>
+                            <Link to='/users'>Users</Link>
                         </li>
                         <li>
                             <Link to='/projects'>Projects</Link>
@@ -72,8 +73,16 @@ class App extends React.Component {
                     </nav>
 
                     <Routes>
-                        <Route exact path='/' element={<UserList users={this.state.users}/>}/>
-                        <Route exact path='/projects' element={<ProjectList projects={this.state.projects}/>}/>
+
+                        <Route exact path='/' element={<Navigate to='/projects' />} />
+                        <Route path='/projects'>
+                            <Route index element={<ProjectList projects={this.state.projects}/>}/>
+                            <Route path=':projectId' element={<ProjectDetail projects={this.state.projects}/>}/>
+
+                        </Route>
+
+                        <Route exact path='/users' element={<UserList users={this.state.users}/>}/>
+                        {/*<Route exact path='/projects' element={<ProjectList projects={this.state.projects}/>}/>*/}
                         <Route exact path='/todos' element={<TodoList todos={this.state.todos}/>}/>
                         <Route path='*' element={<NotFound404 />} />
 
