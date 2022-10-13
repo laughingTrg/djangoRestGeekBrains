@@ -6,3 +6,4 @@ response = requests.post('http://localhost:8000/api-token-auth/', data={'usernam
 
 print(response.status_code)
 print(response.json())
+print(type(response.json()['token']))
