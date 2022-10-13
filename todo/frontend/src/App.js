@@ -19,6 +19,10 @@ class App extends React.Component {
         }
     }
 
+    get_token(username, password){
+        console.log(username, password)
+    }
+
     componentDidMount() {
         axios.get('http://127.0.0.1:8000/api/users')
             .then(responce => {
