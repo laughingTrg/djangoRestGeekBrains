@@ -26,7 +26,8 @@ class App extends React.Component {
     }
 
     set_token(){
-
+        localStorage.setItem('login', 'test')
+        let item = localStorage.getItem('login')
     }
 
     is_auth(){
