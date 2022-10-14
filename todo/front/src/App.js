@@ -15,15 +15,18 @@ class App extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            'users': [],
-            'projects': [],
-            'todos': [],
-            'token': '',
+            'users': [], 'projects': [], 'todos': [], 'token': '', 'current_user': '',
         }
     }
 
-    get_token(username, password) {
+    set_current_user(user) {
+        const cookies = new Cookies()
+        cookies.set('current_user', user)
+        this.setState({'current_user': user}, () => this.load_data())
+    }
 
+    get_token(username, password) {
+        this.set_current_user(username)
         const data = {username: username, password: password}
         axios.post('http://127.0.0.1:8000/api-token-auth/', data).then(response => {
             this.set_token(response.data['token'])
@@ -31,9 +34,6 @@ class App extends React.Component {
     }
 
     set_token(token) {
-        // localStorage.setItem('login', 'test')
-        // let item = localStorage.getItem('login')
-        console.log(token)
         const cookies = new Cookies()
         cookies.set('token', token)
         this.setState({'token': token}, () => this.load_data())
@@ -45,9 +45,11 @@ class App extends React.Component {
 
     logout() {
         this.set_token('')
+        this.set_current_user('')
         this.setState({'users': []}, () => this.load_data())
         this.setState({'projects': []}, () => this.load_data())
         this.setState({'todos': []}, () => this.load_data())
+        // this.setState({'current_user': ''}, () => this.load_data())
     }
 
     get_headers() {
@@ -63,7 +65,9 @@ class App extends React.Component {
     get_token_from_storage() {
         const cookies = new Cookies()
         const token = cookies.get('token')
+        const user = cookies.get('current_user')
         this.setState({'token': token}, () => this.load_data())
+        this.setState({'current_user': user}, () => this.load_data())
     }
 
     load_data() {
@@ -71,22 +75,18 @@ class App extends React.Component {
         axios.get('http://127.0.0.1:8000/api/users', {headers})
             .then(responce => {
                 const users = responce.data
-                this.setState(
-                    {
-                        'users': users,
-                    }
-                )
+                this.setState({
+                    'users': users,
+                })
             }).catch(error => console.log(error))
 
         axios.get('http://127.0.0.1:8000/api/projects', {headers})
             .then(responce => {
                 const projects = responce.data
 
-                this.setState(
-                    {
-                        'projects': projects,
-                    }
-                )
+                this.setState({
+                    'projects': projects,
+                })
 
             }).catch(error => console.log(error))
 
@@ -94,11 +94,9 @@ class App extends React.Component {
             .then(responce => {
                 const todos = responce.data
 
-                this.setState(
-                    {
-                        'todos': todos,
-                    }
-                )
+                this.setState({
+                    'todos': todos,
+                })
 
             }).catch(error => console.log(error))
     }
@@ -112,19 +110,20 @@ class App extends React.Component {
 
             <div className="App">
                 <BrowserRouter>
-                    <nav>
+                    <nav class='menu__group'>
                         <li>
                             <Link to='/users'>Users</Link>
                         </li>
-                        <li>
+                        <li class='li_menu'>
                             <Link to='/projects'>Projects</Link>
                         </li>
                         <li>
                             <Link to='/todos'>Todos</Link>
                         </li>
                         <li>
-                            {this.is_auth() ? <button onClick={() => this.logout()}>Logout</button> :
-                                <Link to='/login'>Login</Link>}
+                            {this.is_auth() ? <div>{this.state.current_user} <button onClick={() => this.logout()}>Выйти</button>
+                                </div> :
+                                <Link to='/login'> Войти</Link>}
                         </li>
                     </nav>
 
@@ -138,7 +137,6 @@ class App extends React.Component {
                         </Route>
 
                         <Route exact path='/users' element={<UserList users={this.state.users}/>}/>
-                        {/*<Route exact path='/projects' element={<ProjectList projects={this.state.projects}/>}/>*/}
                         <Route exact path='/todos' element={<TodoList todos={this.state.todos}/>}/>
                         <Route exact path='/login' element={<LoginForm
                             get_token={(username, password) => this.get_token(username, password)}/>}/>
