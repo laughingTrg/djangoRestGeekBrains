@@ -9,6 +9,7 @@ import {BrowserRouter, Link, Navigate, Route, Routes} from "react-router-dom";
 import NotFound404 from "./components/NotFound404";
 import ProjectDetail from "./components/ProjectDetail";
 import LoginForm from "./components/Auth.js";
+import Cookies from "universal-cookie/es6";
 
 class App extends React.Component {
     constructor(props) {
@@ -22,24 +23,38 @@ class App extends React.Component {
     }
 
     get_token(username, password) {
-        console.log(username, password)
+
+        const data = {username:username, password: password}
+        axios.post('http://127.0.0.1:8000/api-token-auth/', data).then(response => {
+            this.set_token(response.data['token'])
+        }).catch(error => alert('Неверный логин или пароль'))
     }
 
-    set_token(){
-        localStorage.setItem('login', 'test')
-        let item = localStorage.getItem('login')
+    set_token(token){
+        // localStorage.setItem('login', 'test')
+        // let item = localStorage.getItem('login')
+        console.log(token)
+        const cookies = new Cookies()
+        cookies.set('token', token)
+        this.setState({'token': token}, () => this.load_data())
     }
 
     is_auth(){
-
+        return !!this.state.token
     }
 
     logout() {
-
+        this.set_token('')
     }
 
     get_headers(){
-
+        let headers = {
+            'Content-Type': 'applications/json'
+        }
+        if (this.is_auth()){
+            headers['Authorization'] = 'Token ' + this.state.token
+        }
+        return headers
     }
 
     get_token_from_storage(){
@@ -47,7 +62,8 @@ class App extends React.Component {
     }
 
     load_data(){
-        axios.get('http://127.0.0.1:8000/api/users')
+    const headers = this.get_headers()
+        axios.get('http://127.0.0.1:8000/api/users', {headers})
             .then(responce => {
                 const users = responce.data
                 this.setState(
@@ -57,7 +73,7 @@ class App extends React.Component {
                 )
             }).catch(error => console.log(error))
 
-        axios.get('http://127.0.0.1:8000/api/projects')
+        axios.get('http://127.0.0.1:8000/api/projects', {headers})
             .then(responce => {
                 const projects = responce.data
 
@@ -69,7 +85,7 @@ class App extends React.Component {
 
             }).catch(error => console.log(error))
 
-        axios.get('http://127.0.0.1:8000/api/todos')
+        axios.get('http://127.0.0.1:8000/api/todos', {headers})
             .then(responce => {
                 const todos = responce.data
 
