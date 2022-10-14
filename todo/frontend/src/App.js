@@ -1,13 +1,14 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 import React from 'react';
 import UserList from './components/User.js';
 import axios from 'axios';
 import ProjectList from "./components/Project.js";
 import TodoList from "./components/Todo";
-import {BrowserRouter, Link, Navigate, Redirect, Route, Routes} from "react-router-dom";
+import {BrowserRouter, Link, Navigate, Route, Routes} from "react-router-dom";
 import NotFound404 from "./components/NotFound404";
 import ProjectDetail from "./components/ProjectDetail";
+import LoginForm from "./components/Auth.js";
 
 class App extends React.Component {
     constructor(props) {
@@ -16,7 +17,12 @@ class App extends React.Component {
             'users': [],
             'projects': [],
             'todos': [],
+            'token': '',
         }
+    }
+
+    get_token(username, password) {
+        console.log(username, password)
     }
 
     componentDidMount() {
@@ -70,11 +76,14 @@ class App extends React.Component {
                         <li>
                             <Link to='/todos'>Todos</Link>
                         </li>
+                        <li>
+                            <Link to='/login'>Login</Link>
+                        </li>
                     </nav>
 
                     <Routes>
 
-                        <Route exact path='/' element={<Navigate to='/projects' />} />
+                        <Route exact path='/' element={<Navigate to='/projects'/>}/>
                         <Route path='/projects'>
                             <Route index element={<ProjectList projects={this.state.projects}/>}/>
                             <Route path=':projectId' element={<ProjectDetail projects={this.state.projects}/>}/>
@@ -84,7 +93,9 @@ class App extends React.Component {
                         <Route exact path='/users' element={<UserList users={this.state.users}/>}/>
                         {/*<Route exact path='/projects' element={<ProjectList projects={this.state.projects}/>}/>*/}
                         <Route exact path='/todos' element={<TodoList todos={this.state.todos}/>}/>
-                        <Route path='*' element={<NotFound404 />} />
+                        <Route exact path='/login' element={<LoginForm
+                            get_token={(username, password) => this.get_token(username, password)}/>}/>
+                        <Route path='*' element={<NotFound404/>}/>
 
 
                     </Routes>
