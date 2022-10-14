@@ -24,13 +24,13 @@ class App extends React.Component {
 
     get_token(username, password) {
 
-        const data = {username:username, password: password}
+        const data = {username: username, password: password}
         axios.post('http://127.0.0.1:8000/api-token-auth/', data).then(response => {
             this.set_token(response.data['token'])
         }).catch(error => alert('Неверный логин или пароль'))
     }
 
-    set_token(token){
+    set_token(token) {
         // localStorage.setItem('login', 'test')
         // let item = localStorage.getItem('login')
         console.log(token)
@@ -39,30 +39,35 @@ class App extends React.Component {
         this.setState({'token': token}, () => this.load_data())
     }
 
-    is_auth(){
+    is_auth() {
         return !!this.state.token
     }
 
     logout() {
         this.set_token('')
+        this.setState({'users': []}, () => this.load_data())
+        this.setState({'projects': []}, () => this.load_data())
+        this.setState({'todos': []}, () => this.load_data())
     }
 
-    get_headers(){
+    get_headers() {
         let headers = {
             'Content-Type': 'applications/json'
         }
-        if (this.is_auth()){
+        if (this.is_auth()) {
             headers['Authorization'] = 'Token ' + this.state.token
         }
         return headers
     }
 
-    get_token_from_storage(){
-
+    get_token_from_storage() {
+        const cookies = new Cookies()
+        const token = cookies.get('token')
+        this.setState({'token': token}, () => this.load_data())
     }
 
-    load_data(){
-    const headers = this.get_headers()
+    load_data() {
+        const headers = this.get_headers()
         axios.get('http://127.0.0.1:8000/api/users', {headers})
             .then(responce => {
                 const users = responce.data
@@ -99,7 +104,7 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        this.load_data()
+        this.get_token_from_storage()
     }
 
     render() {
@@ -118,7 +123,8 @@ class App extends React.Component {
                             <Link to='/todos'>Todos</Link>
                         </li>
                         <li>
-                            <Link to='/login'>Login</Link>
+                            {this.is_auth() ? <button onClick={() => this.logout()}>Logout</button> :
+                                <Link to='/login'>Login</Link>}
                         </li>
                     </nav>
 
