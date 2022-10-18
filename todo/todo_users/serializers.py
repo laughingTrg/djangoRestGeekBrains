@@ -11,5 +11,5 @@ class UsersModelSerializer(ModelSerializer):
 class UsersNewVersionModelSerializer(ModelSerializer):
     class Meta:
         model = Users
-        fields = ('username', 'firstname', 'lastname', 'email', 'is_superuser', 'is_staff',)
+        fields = 'username', 'firstname', 'lastname', 'email', 'is_superuser', 'is_staff',
 

@@ -57,7 +57,6 @@ class TestUserViewSet(TestCase):
                                'email': 'mary@christmas.io'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-
 class TestProjectViewSet(APITestCase):
 
     def setUp(self) -> None:
