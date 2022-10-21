@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'todo_project',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -145,4 +146,5 @@ REST_FRAMEWORK = {
                                        'rest_framework.authentication.TokenAuthentication',
                                        'rest_framework_simplejwt.authentication.JWTAuthentication',
                                        ],
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.QueryParameterVersioning',
 }
