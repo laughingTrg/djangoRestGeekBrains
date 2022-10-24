@@ -31,6 +31,8 @@ from django.urls import path
 
 from todo_project.views import ProjectModelViewSet
 
+from graphene_django.views import GraphQLView
+
 router = DefaultRouter()
 router.register('users', UsersCustomViewSet)
 router.register('projects', ProjectModelViewSet)
@@ -59,4 +61,6 @@ urlpatterns = [
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema_swagger_ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema_redoc'),
     path('swagger<str:format>/', schema_view.without_ui()),
+
+    path('graphql/', GraphQLView.as_view(graphiql=True)),
 ]
