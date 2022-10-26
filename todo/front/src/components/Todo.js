@@ -7,7 +7,7 @@ const TodotItem = ({ todo, delete_todo }) => {
             <td>{todo.text}</td>
             <td>{todo.project}</td>
             <td>{todo.users}</td>
-            <td>{todo.is_active}</td>
+            <td>{String(todo.is_active)}</td>
             <td><button onClick={()=>delete_todo(todo.id)} type='button'>Delete</button></td>
         </tr>
     )
