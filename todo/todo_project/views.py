@@ -25,6 +25,7 @@ class ProjectModelViewSet(ModelViewSet):
 class TODOModelViewSet(ModelViewSet):
 
     queryset = TODO.objects.all()
+    # queryset = TODO.objects.filter(is_active=True)
     serializer_class = TODOModelSerializer
     # pagination_class = TODOLimitOffsetPagination
     filterset_class = TODOFilter
