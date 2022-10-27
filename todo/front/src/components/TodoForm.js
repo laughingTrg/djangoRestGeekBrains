@@ -42,7 +42,7 @@ class TodoForm extends React.Component {
     }
 
     handleSubmit(event) {
-        // console.log(this.state.login + ' ' + this.state.password)
+
         this.props.create_todo(this.state.text, this.state.projects, this.state.users)
         event.preventDefault()
     }
