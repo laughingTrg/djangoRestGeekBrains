@@ -1,0 +1,19 @@
+version: '3.1'
+services:
+  db:
+    image: postgres:13.1
+    privileged: true
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: django
+      POSTGRES_PASSWORD: 1
+      POSTGRES_DB: db
+  adminer:
+    image: adminer:4.7.8-standalone
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
