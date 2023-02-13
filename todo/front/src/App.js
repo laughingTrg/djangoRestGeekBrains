@@ -25,8 +25,8 @@ class App extends React.Component {
     create_todo(text, projects, users){
         const headers = this.get_headers()
         let is_active = true
-        const data = {text: text, projects: projects, users: users, is_active: is_active}
-        axios.post(`http://127.0.0.1:8000/api/todos/`, data,{headers}).then(response => {
+        const data = {text: text, projects: projects, users: users}
+        axios.post(`http://localhost:8000/api/todos/`, data,{headers, headers}).then(response => {
             this.load_data()
         }).catch(error => {
             console.log(error)
