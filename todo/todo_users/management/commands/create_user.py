@@ -8,9 +8,9 @@ class Command(BaseCommand):
     
     
     def handle(self, *args, **options):
-        su = User.objects.filter(username='admin').first()
+        su = Users.objects.filter(username='admin').one()
         if not su:
-            User.objects.create_superuser(username='admin', password='1', email='admin@adminmail.ru')
+            Users.objects.create_superuser(username='admin', password='1', email='admin@adminmail.ru')
             data_user = {
                 'username': 'jeremy',
                 'firstname': 'John',
