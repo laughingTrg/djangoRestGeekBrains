@@ -18,3 +18,9 @@ services:
     command: bash -c "python manage.py migrate && python manage.py create_user && gunicorn todo.wsgi -b 0.0.0.0:8080"
     depends_on:
       - db
+  nginx:
+    build: ./nginx
+    ports:
+      - 8000:80
+    depends_on:
+      - backend
