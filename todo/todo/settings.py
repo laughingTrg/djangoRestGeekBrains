@@ -36,6 +36,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://192.168.0.19:80",
 ]
 
+CORS_ALLOW_ALL_ORIGINS = True
+
 # Application definition
 
 INSTALLED_APPS = [
